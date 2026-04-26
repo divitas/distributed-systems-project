@@ -1,16 +1,30 @@
 #!/usr/bin/env bash
 set -e
 
-export HF_TOKEN="${HF_TOKEN:-your_huggingface_token_here}"
+if [ -f .env ]; then
+  export $(grep -v '^#' .env | xargs)
+fi
 
-export MODEL_NAME="${MODEL_NAME:-meta-llama/Llama-3.1-8B-Instruct}"
+export MODEL_NAME="${MODEL_NAME:-Qwen/Qwen3-8B}"
 export VLLM_HOST="${VLLM_HOST:-127.0.0.1}"
 export VLLM_PORT="${VLLM_PORT:-8000}"
 
-export LMCACHE_USE_EXPERIMENTAL=True
+export CACHE_BACKEND="${CACHE_BACKEND:-lmcache_inprocess}"
+
+export LMCACHE_USE_EXPERIMENTAL="${LMCACHE_USE_EXPERIMENTAL:-True}"
 export LMCACHE_CONFIG_FILE="${LMCACHE_CONFIG_FILE:-configs/lmcache_cpu.yaml}"
+
+export MAX_MODEL_LEN="${MAX_MODEL_LEN:-16384}"
+export GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.80}"
 
 echo "MODEL_NAME=$MODEL_NAME"
 echo "VLLM_HOST=$VLLM_HOST"
 echo "VLLM_PORT=$VLLM_PORT"
-echo "LMCACHE_CONFIG_FILE=$LMCACHE_CONFIG_FILE"
+echo "CACHE_BACKEND=$CACHE_BACKEND"
+echo "MAX_MODEL_LEN=$MAX_MODEL_LEN"
+echo "GPU_MEMORY_UTILIZATION=$GPU_MEMORY_UTILIZATION"
+
+if [ "$CACHE_BACKEND" != "none" ]; then
+  echo "LMCACHE_CONFIG_FILE=$LMCACHE_CONFIG_FILE"
+  echo "LMCACHE_USE_EXPERIMENTAL=$LMCACHE_USE_EXPERIMENTAL"
+fi

@@ -421,3 +421,46 @@ Once that is confirmed, the project can move toward multi-worker distributed exp
 
 One note: the “Background” wording is based on your uploaded project context, where the earlier repo used HuggingFace `transformers`, manually stored KV caches, and had tiered cache/eviction components. :contentReference[oaicite:0]{index=0}
 ```
+
+Non-LM Cache
+export MODEL_NAME=MODEL_NAME
+export CACHE_BACKEND=none
+export VLLM_HOST=127.0.0.1
+export VLLM_PORT=8000
+export MAX_MODEL_LEN=8192
+export GPU_MEMORY_UTILIZATION=0.75
+
+bash scripts/start_vllm.sh
+
+export MODEL_NAME=MODEL_NAME
+export CACHE_BACKEND=none
+export VLLM_HOST=127.0.0.1
+export VLLM_PORT=8000
+
+bash scripts/run_phase1.sh
+
+LM Cache enabled:
+
+export MODEL_NAME=Qwen/Qwen3-8B
+export CACHE_BACKEND=lmcache_inprocess
+export LMCACHE_CONFIG_FILE=configs/lmcache_cpu.yaml
+export LMCACHE_USE_EXPERIMENTAL=True
+export VLLM_HOST=127.0.0.1
+export VLLM_PORT=8000
+export MAX_MODEL_LEN=8192
+export GPU_MEMORY_UTILIZATION=0.75
+
+bash scripts/start_vllm.sh
+
+export MODEL_NAME=Qwen/Qwen3-8B
+export CACHE_BACKEND=lmcache_inprocess
+export VLLM_HOST=127.0.0.1
+export VLLM_PORT=8000
+
+bash scripts/run_phase1.sh
+
+Compare results:
+
+python -m evaluation.compare_results \
+  --baseline results/phase1_none.jsonl \
+  --lmcache results/phase1_lmcache_inprocess.jsonl
