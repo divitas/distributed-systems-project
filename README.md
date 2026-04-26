@@ -1,6 +1,3 @@
-Here is the full `README.md` content you can paste directly.
-
-````md
 # LMCache + vLLM Prefix KV-Cache Reuse Experiment
 
 This project studies prefix KV-cache reuse using the official **LMCache + vLLM** integration.
