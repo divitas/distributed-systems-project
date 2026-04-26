@@ -5,8 +5,12 @@ from pathlib import Path
 from statistics import mean, median
 
 
-def summarize_latencies(rows: list[dict]) -> dict:
-    latencies = [row["latency_sec"] for row in rows]
+def summarize_metric(rows: list[dict], metric_key: str) -> dict:
+    latencies = [
+        row[metric_key]
+        for row in rows
+        if row.get(metric_key) is not None
+    ]
 
     if not latencies:
         return {}
@@ -26,6 +30,10 @@ def summarize_latencies(rows: list[dict]) -> dict:
         "min_latency_sec": min(latencies),
         "max_latency_sec": max(latencies),
     }
+
+
+def summarize_latencies(rows: list[dict]) -> dict:
+    return summarize_metric(rows, "latency_sec")
 
 
 def write_jsonl(path: str, rows: list[dict]) -> None:

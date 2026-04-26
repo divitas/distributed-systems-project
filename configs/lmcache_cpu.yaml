@@ -1,6 +1,6 @@
 chunk_size: 256
 
-local_cpu:true
+local_cpu: true
 max_local_cpu_size: 5.0
 
 local_disk: null
@@ -8,4 +8,5 @@ max_local_disk_size: 0.0
 
 save_decode_cache: false
 
-# LMCache supports configuration through YAML or environment variables. If LMCACHE_CONFIG_FILE is set, the config file is used and LMCache environment-variable configs are ignored. The docs list chunk_size, local_cpu, max_local_cpu_size, local_disk, max_local_disk_size, and save_decode_cache as supported config names.
+# If LMCACHE_CONFIG_FILE is set, LMCache uses this file instead of
+# LMCACHE_* environment-variable config values.
